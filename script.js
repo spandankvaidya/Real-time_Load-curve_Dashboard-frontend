@@ -191,7 +191,7 @@ flatpickr(datePickerInput, {
     startBtn.disabled = true;
 
     // Call backend script that runs ML prediction and launches dashboard
-    fetch(`https://real-time-load-curve-dashboard.onrender.com`)
+    fetch(`https://real-time-load-curve-dashboard.onrender.com/run-forecast?date=${selectedDate}`)
       .then(res => res.json())
       .then(data => {
         console.log("✅ Backend responded:", data);
