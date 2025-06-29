@@ -179,44 +179,43 @@ flatpickr(datePickerInput, {
     calendarModal.classList.add("hidden");
   });
 
-  // === Confirm date + Start Test ===
   confirmDateBtn.addEventListener("click", () => {
-    if (!selectedDate) {
-      alert("Please select a valid test date.");
-      return;
-    }
+  if (!selectedDate) {
+    alert("Please select a valid test date.");
+    return;
+  }
 
-    calendarModal.classList.add("hidden");
-    startBtn.textContent = "⏳ Starting Test...";
-    startBtn.disabled = true;
+  calendarModal.classList.add("hidden");
+  startBtn.textContent = "⏳ Starting Test...";
+  startBtn.disabled = true;
 
-    // Call backend script that runs ML prediction and launches dashboard
-    fetch(`https://real-time-load-curve-dashboard.onrender.com/run-forecast?date=${selectedDate}`)
-      iframe.src = "https://real-time-load-curve-dashboard.onrender.com/dashboard"
+  fetch(`https://real-time-load-curve-dashboard.onrender.com/run-forecast?date=${selectedDate}`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("✅ Backend responded:", data);
 
-      .then(res => res.json())
-      .then(data => {
-        console.log("✅ Backend responded:", data);
-        // Load iframe
+      // Load iframe after short delay
+      setTimeout(() => {
+        wallpaper.classList.add("fade-out");
         setTimeout(() => {
-          wallpaper.classList.add("fade-out");
-          setTimeout(() => {
-            wallpaper.style.display = "none";
-            iframe.src = "http://127.0.0.1:8050";
-            iframe.classList.remove("hidden");
+          wallpaper.style.display = "none";
 
-            dateBlock.textContent = `📅 Forecast for: ${selectedDate}`;
-            dateBlock.classList.remove("hidden");
+          // 👇 FIXED: Load Render-hosted dashboard
+          iframe.src = "https://real-time-load-curve-dashboard.onrender.com/";
+          iframe.classList.remove("hidden");
 
-            startBtn.textContent = "✅ Test Running";
-          }, 1000);
-        }, 2000);
-      })
-      .catch(err => {
-        console.error("❌ Error calling backend:", err);
-        alert("Error starting forecast. Check backend.");
-        startBtn.disabled = false;
-        startBtn.textContent = "Start Test";
-      });
-  });
+          dateBlock.textContent = `📅 Forecast for: ${selectedDate}`;
+          dateBlock.classList.remove("hidden");
+
+          startBtn.textContent = "✅ Test Running";
+        }, 1000);
+      }, 2000);
+    })
+    .catch(err => {
+      console.error("❌ Error calling backend:", err);
+      alert("Error starting forecast. Check backend.");
+      startBtn.disabled = false;
+      startBtn.textContent = "Start Test";
+    });
 });
+
