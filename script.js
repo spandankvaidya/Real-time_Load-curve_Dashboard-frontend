@@ -191,7 +191,7 @@ flatpickr(datePickerInput, {
     startBtn.disabled = true;
 
     // Call backend script that runs ML prediction and launches dashboard
-    fetch(https://real-time-load-curve-dashboard.onrender.com/run-forecast?date=${selectedDate})
+    fetch(`https://real-time-load-curve-dashboard.onrender.com/run-forecast?date=${selectedDate}`)
     iframe.src = "https://real-time-load-curve-dashboard.onrender.com/";
 
       .then(res => res.json())
@@ -205,7 +205,7 @@ flatpickr(datePickerInput, {
             iframe.src = "http://127.0.0.1:8050";
             iframe.classList.remove("hidden");
 
-            dateBlock.textContent = 📅 Forecast for: ${selectedDate};
+            dateBlock.textContent = `📅 Forecast for: ${selectedDate}`;
             dateBlock.classList.remove("hidden");
 
             startBtn.textContent = "✅ Test Running";
