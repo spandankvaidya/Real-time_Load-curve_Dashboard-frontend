@@ -191,31 +191,35 @@ flatpickr(datePickerInput, {
     startBtn.disabled = true;
 
     // Call backend script that runs ML prediction and launches dashboard
-    fetch('https://real-time-load-curve-dashboard.onrender.com/')
-
-      .then(res => res.json())
-      .then(data => {
-        console.log("✅ Backend responded:", data);
-        // Load iframe
+   fetch(`https://real-time-load-curve-dashboard-backend.onrender.com/run-forecast?date=${selectedDate}`)
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then(data => {
+      console.log("✅ Backend responded:", data);
+      // Load iframe
+      setTimeout(() => {
+        wallpaper.classList.add("fade-out");
         setTimeout(() => {
-          wallpaper.classList.add("fade-out");
-          setTimeout(() => {
-            wallpaper.style.display = "none";
-            iframe.src = "https://real-time-load-curve-dashboard.onrender.com/";
-            iframe.classList.remove("hidden");
+          wallpaper.style.display = "none";
+          iframe.src = "https://real-time-load-curve-dashboard.onrender.com/";
+          iframe.classList.remove("hidden");
 
-            dateBlock.textContent = `📅 Forecast for: ${selectedDate}`;
-            dateBlock.classList.remove("hidden");
+          dateBlock.textContent = `📅 Forecast for: ${selectedDate}`;
+          dateBlock.classList.remove("hidden");
 
-            startBtn.textContent = "✅ Test Running";
-          }, 1000);
-        }, 2000);
-      })
-      .catch(err => {
-        console.error("❌ Error calling backend:", err);
-        alert("Error starting forecast. Check backend.");
-        startBtn.disabled = false;
-        startBtn.textContent = "Start Test";
-      });
+          startBtn.textContent = "✅ Test Running";
+        }, 1000);
+      }, 2000);
+    })
+    .catch(err => {
+      console.error("❌ Error calling backend:", err);
+      alert("Error starting forecast. Check backend.");
+      startBtn.disabled = false;
+      startBtn.textContent = "Start Test";
+    });
   });
 });
