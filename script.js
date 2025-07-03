@@ -191,7 +191,8 @@ flatpickr(datePickerInput, {
     startBtn.disabled = true;
 
     // Call backend script that runs ML prediction and launches dashboard
-   fetch(`https://real-time-load-curve-dashboard-backend.onrender.com/run-forecast?date=${selectedDate}`)
+   // Call backend script that runs ML prediction and launches dashboard
+  fetch(`https://real-time-load-curve-dashboard-backend.onrender.com/run-forecast?date=${selectedDate}`)
     .then(res => {
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
@@ -205,7 +206,7 @@ flatpickr(datePickerInput, {
         wallpaper.classList.add("fade-out");
         setTimeout(() => {
           wallpaper.style.display = "none";
-          iframe.src = "https://real-time-load-curve-dashboard.onrender-2.com/";
+          iframe.src = "https://real-time-load-curve-dashboard-backend-2.onrender.com/";  // ✅ Corrected
           iframe.classList.remove("hidden");
 
           dateBlock.textContent = `📅 Forecast for: ${selectedDate}`;
