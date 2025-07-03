@@ -205,7 +205,7 @@ flatpickr(datePickerInput, {
         wallpaper.classList.add("fade-out");
         setTimeout(() => {
           wallpaper.style.display = "none";
-          iframe.src = "https://real-time-load-curve-dashboard.onrender.com/";
+          iframe.src = "https://real-time-load-curve-dashboard.onrender-2.com/";
           iframe.classList.remove("hidden");
 
           dateBlock.textContent = `📅 Forecast for: ${selectedDate}`;
