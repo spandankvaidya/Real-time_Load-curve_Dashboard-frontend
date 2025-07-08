@@ -180,6 +180,9 @@ flatpickr(datePickerInput, {
   });
 
   // === Confirm date + Start Test ===
+ // In script.js
+
+// === Confirm date + Start Test ===
   confirmDateBtn.addEventListener("click", () => {
     if (!selectedDate) {
       alert("Please select a valid test date.");
@@ -187,40 +190,26 @@ flatpickr(datePickerInput, {
     }
 
     calendarModal.classList.add("hidden");
-    startBtn.textContent = "⏳ Starting Test...";
+    startBtn.textContent = "✅ Test Running";
     startBtn.disabled = true;
 
-    // Call backend script that runs ML prediction and launches dashboard
-   // Call backend script that runs ML prediction and launches dashboard
-  fetch(`https://real-time-load-curve-dashboard-backend.onrender.com/run-forecast?date=${selectedDate}`)
-    .then(res => {
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then(data => {
-      console.log("✅ Backend responded:", data);
-      // Load iframe
-      setTimeout(() => {
-        wallpaper.classList.add("fade-out");
-        setTimeout(() => {
-          wallpaper.style.display = "none";
-          iframe.src = "http://127.0.0.1:8050/"; // ✅ Corrected
-          iframe.classList.remove("hidden");
+    // The backend URL for your Render app
+    const backendUrl = "https://real-time-load-curve-dashboard-backend.onrender.com";
 
-          dateBlock.textContent = `📅 Forecast for: ${selectedDate}`;
-          dateBlock.classList.remove("hidden");
+    // --- NEW LOGIC ---
+    // Directly set the iframe source with the date in the path
+    const dashUrl = `${backendUrl}/dashboard/${selectedDate}`;
 
-          startBtn.textContent = "✅ Test Running";
-        }, 1000);
-      }, 2000);
-    })
-    .catch(err => {
-      console.error("❌ Error calling backend:", err);
-      alert("Error starting forecast. Check backend.");
-      startBtn.disabled = false;
-      startBtn.textContent = "Start Test";
-    });
+    console.log("Loading Dash app at:", dashUrl);
+
+    // Fade out the wallpaper and show the iframe
+    wallpaper.classList.add("fade-out");
+    setTimeout(() => {
+      wallpaper.style.display = "none";
+      iframe.src = dashUrl; // Set the correct, public URL
+      iframe.classList.remove("hidden");
+
+      dateBlock.textContent = `📅 Forecast for: ${selectedDate}`;
+      dateBlock.classList.remove("hidden");
+    }, 1000); // 1-second fade-out
   });
-});
