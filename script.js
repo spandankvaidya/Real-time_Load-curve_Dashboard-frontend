@@ -213,3 +213,4 @@ flatpickr(datePickerInput, {
       dateBlock.classList.remove("hidden");
     }, 1000); // 1-second fade-out
   });
+});
